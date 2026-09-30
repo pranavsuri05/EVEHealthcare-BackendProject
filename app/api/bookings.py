@@ -53,7 +53,8 @@ def list_bookings(
         limit=limit,
         db=db,
     )
-    return PaginatedResponse(items=bookings, total=total, skip=skip, limit=limit)
+    items = [BookingResponse.model_validate(b) for b in bookings]
+    return PaginatedResponse(items=items, total=total, skip=skip, limit=limit)
 
 
 @router.get("/{booking_id}", response_model=BookingDetailResponse)

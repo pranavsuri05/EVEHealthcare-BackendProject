@@ -31,7 +31,8 @@ def list_centres(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     query = db.query(DiagnosticCentre)
     total = query.count()
     centres = query.offset(skip).limit(limit).all()
-    return PaginatedResponse(items=centres, total=total, skip=skip, limit=limit)
+    items = [DiagnosticCentreResponse.model_validate(c) for c in centres]
+    return PaginatedResponse(items=items, total=total, skip=skip, limit=limit)
 
 
 @router.get("/{centre_id}", response_model=DiagnosticCentreResponse)

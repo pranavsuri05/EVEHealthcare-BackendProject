@@ -36,7 +36,8 @@ def list_tests(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     query = db.query(DiagnosticTest)
     total = query.count()
     tests = query.offset(skip).limit(limit).all()
-    return PaginatedResponse(items=tests, total=total, skip=skip, limit=limit)
+    items = [DiagnosticTestResponse.model_validate(t) for t in tests]
+    return PaginatedResponse(items=items, total=total, skip=skip, limit=limit)
 
 
 @router.get("/{test_id}", response_model=DiagnosticTestResponse)
@@ -121,17 +122,7 @@ def list_centre_tests(
 
     # Convert to response format
     items = [
-        {
-            "id": ct.id,
-            "centre_id": ct.centre_id,
-            "test_id": ct.test_id,
-            "price": ct.price,
-            "available": ct.available,
-            "centre": ct.centre,
-            "test": ct.test,
-            "created_at": ct.created_at,
-            "updated_at": ct.updated_at,
-        }
+        CentreTestWithRelationsResponse.model_validate(ct)
         for ct in centre_tests
     ]
 

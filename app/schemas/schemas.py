@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, Any
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -174,7 +174,7 @@ class PaginationParams(BaseModel):
 
 
 class PaginatedResponse(BaseModel):
-    items: list
+    items: List[Any]
     total: int
     skip: int
     limit: int

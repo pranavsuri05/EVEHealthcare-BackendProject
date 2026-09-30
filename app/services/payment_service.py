@@ -48,7 +48,7 @@ class PaymentService:
             raise ValidationError("Cannot create payment for cancelled booking")
 
         if booking.status == BookingStatus.CONFIRMED:
-            raise ValidationError("Booking already has successful payment")
+            raise ConflictError("Booking already has successful payment")
 
         # Check if payment already exists with SUCCESS status
         existing_payment = (
